@@ -1,5 +1,4 @@
 import jiraConnection
-import requests as req
 
 jira = jiraConnection.Config()
 

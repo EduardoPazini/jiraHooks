@@ -1,4 +1,4 @@
-# jiraHooks
+# JiraHooks
 
 The purpose of the code is to get all passwords for each client registered with Jira, the information is exported to a txt document.
 
