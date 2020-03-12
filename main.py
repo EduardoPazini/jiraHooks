@@ -1,14 +1,16 @@
 import jiraConnection
+import sys
 
 jira = jiraConnection.Config()
 
-# Set here the numbers of projects CLIEN
+# Get args regarding ClienInicial and ClienFinal from command line
+args = sys.argv[1:]
 
-clienInicial = X
-clienFinal = Y
+if(int(args[0]) >= int(args[1])):
+    print("Error: the final client is lowest than inicial client")
+    sys.exit()
 
-
-for clien in range(clienInicial, clienFinal):
+for clien in range(int(args[0]), int(args[1])):
     strClien = str(clien)
     psw = jira.get_description(strClien)
     

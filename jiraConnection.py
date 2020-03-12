@@ -3,12 +3,12 @@ import requests
 
 # Set here the credentials
 
-#Set here your workspace/server
+# Set here your workspace/server
 workspace = 'yourWorkspaceServer'
 
 email = 'yourJiraEmail'
 
-#Set here your jira security token
+# Set here your jira security token
 token = 'yourJiraSecurityToken'
 
 class Config():
@@ -39,9 +39,7 @@ class Config():
                 psw = (aux.split('\n', 1)[0].lstrip(' '))
             else:
                 psw = 'null';
-            return psw
-            
-            
+            return psw           
 
     def archive(self, clien, psw):
         client = str('CLIEN-' + clien + ', ')
@@ -53,7 +51,6 @@ class Config():
 
 
 # Function to open a connection with jira using workspace, email and token
-
 def open_connection(workspace, email, token):
     jira = JIRA(server=workspace, 
         basic_auth=(email, token))
