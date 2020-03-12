@@ -31,7 +31,7 @@ source env/bin/activate
 pip install -r requirements.txt
 ```
 
-4) Just run the command and wait until it finishes, the time to run depends your <clienInicial> and <clienFinal>
+4) Just run the command and wait until it finishes, the time to run depends your clienInicial and clienFinal
 
 ```
 $ python3 main.py <clienInicial> <clienFinal>
