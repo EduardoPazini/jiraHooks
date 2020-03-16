@@ -4,34 +4,38 @@ The purpose of the code is to get all passwords for each client registered with 
 
 # How to use
 
-1) Set your credentials in jiraConnection.py
+1) Create a file called .env, set your jira credentials in it, like this:
 
 ```
-# Set here the credentials
+WORKSPACE=https://myServer.myDomain.net/
 
-#Set here your workspace/server
-workspace = 'workspace'
+EMAIL=myEmail@myDomain.com
 
-email = 'email'
-
-#Set here your jira security token
-token = 'token'
+TOKEN=42isTheNumberOfLife
 ```
 
-2) Install and set the virtual enviroment
+2) In jiraConnections.py, set the path of your .env:
+
+```
+# In my case, the path is 'home/eduardo'
+
+env_path = Path('/home/eduardo')/'.env'
+```
+
+3) Install and set the virtual enviroment
 
 ```
 python -m venv env
 source env/bin/activate
 ```
 
-3) Install the packages required
+4) Install the packages required
    
 ```
 pip install -r requirements.txt
 ```
 
-4) Just run the command and wait until it finishes, the time to run depends your clienInicial and clienFinal
+5) Just run the command and wait until it finishes, the time to run depends your clienInicial and clienFinal
 
 ```
 $ python3 main.py <clienInicial> <clienFinal>

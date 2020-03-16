@@ -1,15 +1,19 @@
 from jira import JIRA
+from dotenv import load_dotenv
+from pathlib import Path
+
 import requests
+import os
 
-# Set here the credentials
+# Set here the path of your .env
+env_path = Path('/home/eduardo')/'.env'
+load_dotenv(dotenv_path=env_path)
 
-# Set here your workspace/server
-workspace = 'yourWorkspaceServer'
+workspace = os.getenv("WORKSPACE")
 
-email = 'yourJiraEmail'
+email = os.getenv("EMAIL")
 
-# Set here your jira security token
-token = 'yourJiraSecurityToken'
+token = os.getenv("TOKEN")
 
 class Config():
     def __init__(self):
