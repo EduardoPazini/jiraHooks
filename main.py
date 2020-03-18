@@ -4,10 +4,12 @@ import sys
 
 jira = jiraConnection.Config()
 
-argsValidate.main(sys.argv[1:])
+argsValidate.main(sys.argv)
 
 if __name__ == "__main__":
-    for clien in range(int(sys.argv[1]), int(sys.argv[2])+1):
+    args = jira.swap(sys.argv[1:])
+
+    for clien in range(int(args[0]), int(args[1])+1):
 	    psw = jira.get_description(str(clien))
 
 	    if (psw != 'null'):

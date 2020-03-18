@@ -51,6 +51,14 @@ class Config():
         f.write(info)
         f.close()
 
+    def swap(self, args):
+        if(args[0] > args[1]):
+            temp = args[1]
+            args[1] = args[0]
+            args[0] = temp
+            return args
+        return args
+
 
 # Function to open a connection with jira using workspace, email and token
 def open_connection(workspace, email, token):
