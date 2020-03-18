@@ -10,9 +10,7 @@ env_path = Path('/home/eduardo')/'.env'
 load_dotenv(dotenv_path=env_path)
 
 workspace = os.getenv("WORKSPACE")
-
 email = os.getenv("EMAIL")
-
 token = os.getenv("TOKEN")
 
 class Config():
