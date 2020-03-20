@@ -46,19 +46,24 @@ class Config():
     def archive(self, clien, psw):
         client = str('CLIEN-' + clien + ', ')
         info = str(client + psw + '\n')
-        
-        f = open('infos.txt', 'a')
-        f.write(info)
-        f.close()
+        file = 'infos.txt'
+
+        try:
+          with open(file, 'a') as f:
+               f.write(info)
+        except OSError as e:
+               print(f"Could not open file:", file)
+               sys.exit()
+        except IOError as e:
+               print(f"Could not read/write file:", file)    
+               sys.exit()
 
     def swap(self, args):
         if(args[0] > args[1]):
             temp = args[1]
             args[1] = args[0]
             args[0] = temp
-            return args
         return args
-
 
 # Function to open a connection with jira using workspace, email and token
 def open_connection(workspace, email, token):
