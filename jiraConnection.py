@@ -17,46 +17,16 @@ class Config():
     def __init__(self):
         self.jira = open_connection(workspace, email, token)
 
-    def get_description(self, clien):
-        response = requests.get(workspace + '/rest/api/2/issue/CLIEN-' + str(clien),
-            auth=(email, token))
-
-        res = ''
-        for x in range(2, 15):
-            res = res + response.text[x]
-        
-        if(res == 'errorMessages'):
-            return 'null'
-        else:
-            issue = self.jira.issue(str('CLIEN-' + clien))
-            description = (issue.fields.description)
-
-            if(description == None):
-                psw = 'null'
-            elif(description.find('Senha:') != -1):
-                aux = (description.split("Senha:", 1)[1])
-                psw = (aux.split('\n', 1)[0].lstrip(' '))
-            elif(description.find('senha:') != -1):
-                aux = (description.split("senha:", 1)[1])
-                psw = (aux.split('\n', 1)[0].lstrip(' '))
-            else:
-                psw = 'null';
-            return psw           
-
-    def archive(self, clien, psw):
-        client = str('CLIEN-' + clien + ', ')
-        info = str(client + psw + '\n')
-        file = 'infos.txt'
-
-        try:
-          with open(file, 'a') as f:
-               f.write(info)
-        except OSError as e:
-               print(f"Could not open file:", file)
-               sys.exit()
-        except IOError as e:
-               print(f"Could not read/write file:", file)    
-               sys.exit()
+    def get_all_infos(self, inicial, final):
+        infos = ''
+        for issue in self.jira.search_issues('project=CLIEN ORDER BY key ASC', startAt=0, maxResults=None):
+            key = (int(issue.key.split('-',1)[1]))
+            if(key >= inicial and key <= final):
+                if(issue.fields.description != None):
+                    psw = get_password(issue.fields.description)
+                    if (psw != -1):
+                        infos = infos + structure_response(str(key), psw)
+        archive(infos)
 
     def swap(self, args):
         if(args[0] > args[1]):
@@ -70,3 +40,30 @@ def open_connection(workspace, email, token):
     jira = JIRA(server=workspace, 
         basic_auth=(email, token))
     return jira
+
+def get_password(description):
+    if(description.find('Senha:') != -1):
+        aux = (description.split("Senha:", 1)[1])
+        psw = (aux.split('\n', 1)[0].lstrip(' '))
+    elif(description.find('senha:') != -1):
+        aux = (description.split("senha:", 1)[1])
+        psw = (aux.split('\n', 1)[0].lstrip(' '))
+    else:
+        return -1
+    return psw
+
+def structure_response(clien, psw):
+    lineInfo = str('CLIEN-' + clien + ', ' + psw + '\n')
+    return lineInfo
+
+def archive(infos):
+    file = 'infos.txt'
+    try:
+      with open(file, 'a') as f:
+           f.write(infos)
+    except OSError as e:
+           print(f"Could not open file:", file)
+           sys.exit()
+    except IOError as e:
+           print(f"Could not read/write file:", file)    
+           sys.exit()
