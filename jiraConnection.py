@@ -17,11 +17,11 @@ class Config():
     def __init__(self):
         self.jira = open_connection(workspace, email, token)
 
-    def get_all_infos(self, inicial, final):
+    def get_all_infos(self, initial, final):
         infos = ''
         for issue in self.jira.search_issues('project=CLIEN ORDER BY key ASC', startAt=0, maxResults=None):
             key = (int(issue.key.split('-',1)[1]))
-            if(key >= inicial and key <= final):
+            if(key >= initial and key <= final):
                 if(issue.fields.description != None):
                     psw = get_password(issue.fields.description)
                     if (psw != -1):
