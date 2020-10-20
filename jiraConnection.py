@@ -14,21 +14,22 @@ workspace = os.getenv("WORKSPACE")
 email = os.getenv("EMAIL")
 token = os.getenv("TOKEN")
 
+
 class Config():
     def __init__(self):
         self.jira = open_connection(workspace, email, token)
 
     def post_infos(self):
-        read_csv()
-        '''
-        for issue in self.jira.search_issues('project=CLIEN ORDER BY key ASC', startAt=0, maxResults=None):
-            key = (int(issue.key.split('-',1)[1]))
-            if(key >= initial and key <= final):
-                created = issue.fields.created
-                seg = issue.fields.customfield_10029
-                infos = infos + structure_response(str(key), str(created), str(seg))
-        archive(infos)
-        '''
+        line_count = 0
+        with open('test.csv') as csv_file:
+            infos = csv.reader(csv_file, delimiter=',')
+            for row in infos:
+                issue = self.jira.issue(row[1])
+                iuguCode = row[0]
+                issue.update(fields={'customfield_10129': iuguCode})
+                line_count += 1
+                print(f'On {row[1]}')
+            print(f'\nProcessed {line_count} lines.')
 
 
 # Function to open a connection with jira using workspace, email and token
@@ -36,16 +37,3 @@ def open_connection(workspace, email, token):
     jira = JIRA(server=workspace, 
         basic_auth=(email, token))
     return jira
-
-
-# Function to read a csv and atribute a variable
-def read_csv():
-    with open('test.csv') as csv_file:
-        csv_reader = csv.reader(csv_file, delimiter=',')
-        line_count = 0
-        infos = ''
-        for row in csv_reader:
-            infos += row[0] + ',' + row[1] + '\n'
-            line_count += 1
-        print(f'Processed {line_count} lines.')
-        return infos
