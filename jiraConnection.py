@@ -2,6 +2,7 @@ from jira import JIRA
 from dotenv import load_dotenv
 from pathlib import Path
 
+import csv
 import requests
 import os
 
@@ -17,8 +18,9 @@ class Config():
     def __init__(self):
         self.jira = open_connection(workspace, email, token)
 
-    def get_all_infos(self, initial, final):
-        infos = ''
+    def post_infos(self):
+        read_csv()
+        '''
         for issue in self.jira.search_issues('project=CLIEN ORDER BY key ASC', startAt=0, maxResults=None):
             key = (int(issue.key.split('-',1)[1]))
             if(key >= initial and key <= final):
@@ -26,13 +28,8 @@ class Config():
                 seg = issue.fields.customfield_10029
                 infos = infos + structure_response(str(key), str(created), str(seg))
         archive(infos)
+        '''
 
-    def swap(self, args):
-        if(args[0] > args[1]):
-            temp = args[1]
-            args[1] = args[0]
-            args[0] = temp
-        return args
 
 # Function to open a connection with jira using workspace, email and token
 def open_connection(workspace, email, token):
@@ -40,29 +37,15 @@ def open_connection(workspace, email, token):
         basic_auth=(email, token))
     return jira
 
-def get_password(description):
-    if(description.find('Senha:') != -1):
-        aux = (description.split("Senha:", 1)[1])
-        psw = (aux.split('\n', 1)[0].lstrip(' '))
-    elif(description.find('senha:') != -1):
-        aux = (description.split("senha:", 1)[1])
-        psw = (aux.split('\n', 1)[0].lstrip(' '))
-    else:
-        return -1
-    return psw
 
-def structure_response(clien, created, seg):
-    lineInfo = str('CLIEN-' + clien + ', ' + created + ', ' + seg +'\n')
-    return lineInfo
-
-def archive(infos):
-    file = 'infos.csv'
-    try:
-      with open(file, 'a') as f:
-           f.write(infos)
-    except OSError as e:
-           print(f"Could not open file:", file)
-           sys.exit()
-    except IOError as e:
-           print(f"Could not read/write file:", file)    
-           sys.exit()
+# Function to read a csv and atribute a variable
+def read_csv():
+    with open('test.csv') as csv_file:
+        csv_reader = csv.reader(csv_file, delimiter=',')
+        line_count = 0
+        infos = ''
+        for row in csv_reader:
+            infos += row[0] + ',' + row[1] + '\n'
+            line_count += 1
+        print(f'Processed {line_count} lines.')
+        return infos
